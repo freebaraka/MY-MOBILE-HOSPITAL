@@ -1,0 +1,3006 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY MOBILE HOSPITAL - RDC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 420px;
+            width: 100%;
+            background: #f8f9fa;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 90vh;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .app-header h1 {
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .app-header .logo {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            padding: 20px 20px 80px 20px;
+            min-height: calc(90vh - 140px);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-banner h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .action-btn i {
+            font-size: 32px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .action-btn span {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+            background: #e9ecef;
+        }
+
+        .card-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .card-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .rating {
+            color: #ffc107;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #4facfe;
+            color: #4facfe;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 45px 15px 20px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4facfe;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+        }
+
+        .filter-chips::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .filter-chips::-webkit-scrollbar-thumb {
+            background: #4facfe;
+            border-radius: 2px;
+        }
+
+        .chip {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .chip:hover, .chip.active {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 420px;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            color: #999;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #4facfe;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 380px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: #e9ecef;
+        }
+
+        .calendar-day.selected {
+            background: #4facfe;
+            color: white;
+        }
+
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.disabled:hover {
+            background: transparent;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            background: #4facfe;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ministry-logo {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .ministry-logo i {
+            font-size: 40px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .ministry-logo p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            max-width: 360px;
+            width: 90%;
+            z-index: 3000;
+            animation: slideDown 0.3s ease;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            color: #333;
+        }
+
+        .message.sent .message-bubble {
+            background: #4facfe;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .chart-placeholder {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .table th {
+            background: #4facfe;
+            color: white;
+            font-weight: 600;
+        }
+
+        .table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .profile-header h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .profile-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .footer p {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #4facfe;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* Nouvelles classes pour les fonctionnalités ajoutées */
+        .wellness-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .wellness-category {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wellness-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .wellness-category i {
+            font-size: 32px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .wellness-category h3 {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .article-image {
+            height: 150px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+
+        .article-content {
+            padding: 15px;
+        }
+
+        .article-content h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .article-content p {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-stat {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-stat h3 {
+            font-size: 24px;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .admin-stat p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .admin-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .admin-table th {
+            background: #4facfe;
+            color: white;
+            font-weight: 600;
+        }
+
+        .admin-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .profile-section {
+            margin-bottom: 25px;
+        }
+
+        .profile-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .medical-history-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .medical-history-item h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .medical-history-item p {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .medical-history-item .date {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* Nouvelles classes pour les fonctionnalités avancées */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .payment-method {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method.selected {
+            border-color: #4facfe;
+            background: #f0f8ff;
+        }
+
+        .payment-method i {
+            font-size: 32px;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .payment-method h4 {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .time-slot {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .time-slot.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .time-slot.disabled {
+            background: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .partner-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .partner-card i {
+            font-size: 40px;
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .partner-card h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .partner-card p {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .expense-info h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .expense-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .expense-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4facfe;
+        }
+
+        .benefit-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .benefit-item h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .benefit-item ul {
+            font-size: 12px;
+            color: #666;
+            padding-left: 20px;
+        }
+
+        .benefit-item li {
+            margin-bottom: 5px;
+        }
+
+        .visit-item {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .visit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .visit-header h4 {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .visit-date {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .visit-details {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .doctor-portfolio {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .doctor-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .doctor-stat {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .doctor-stat h4 {
+            font-size: 18px;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .doctor-stat p {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .map-button {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                border-radius: 0;
+                max-width: 100%;
+                min-height: 100vh;
+            }
+
+            body {
+                padding: 0;
+            }
+
+            .bottom-nav {
+                border-radius: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="logo">🏥</div>
+            <h1>MY MOBILE HOSPITAL</h1>
+            <p style="font-size: 12px; margin-top: 5px;">République Démocratique du Congo</p>
+        </div>
+
+        <div class="content">
+            <!-- HOME PAGE -->
+            <div class="page active" id="home">
+                <div class="welcome-banner">
+                    <h2>Bienvenue</h2>
+                    <p>La santé du Congo à portée de main</p>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="navigateTo('hospitals')">
+                        <i class="fas fa-hospital"></i>
+                        <span>Trouver un Hôpital</span>
+                    </button>
+                    <button class="action-btn" onclick="navigateTo('doctors')">
+                        <i class="fas fa-user-md"></i>
+                        <span>Réserver</span>
+                    </button>
+                    <button class="action-btn" onclick="navigateTo('emergency')">
+                        <i class="fas fa-ambulance"></i>
+                        <span>Urgence</span>
+                    </button>
+                    <button class="action-btn" onclick="navigateTo('wellness')">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Bien-être</span>
+                    </button>
+                    <button class="action-btn" onclick="navigateTo('articles')">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Articles</span>
+                    </button>
+                    <button class="action-btn" onclick="navigateTo('profile')">
+                        <i class="fas fa-user"></i>
+                        <span>Profil</span>
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>248</h3>
+                        <p>Hôpitaux</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>1,542</h3>
+                        <p>Médecins</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>89K</h3>
+                        <p>Patients</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Partenaires Institutionnels</h3>
+                    <div class="partner-grid">
+                        <div class="partner-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>Ministère de la Santé RDC</h3>
+                            <p>Partenaire officiel</p>
+                        </div>
+                        <div class="partner-card">
+                            <i class="fas fa-globe-africa"></i>
+                            <h3>Organisation Mondiale de la Santé</h3>
+                            <p>Support technique</p>
+                        </div>
+                        <div class="partner-card">
+                            <i class="fas fa-child"></i>
+                            <h3>UNICEF</h3>
+                            <p>Santé maternelle et infantile</p>
+                        </div>
+                        <div class="partner-card">
+                            <i class="fas fa-plus-square"></i>
+                            <h3>Croix-Rouge</h3>
+                            <p>Urgences et premiers secours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ministry-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <p><strong>Ministère de la Santé</strong></p>
+                    <p>République Démocratique du Congo</p>
+                </div>
+            </div>
+
+            <!-- HOSPITALS PAGE -->
+            <div class="page" id="hospitals">
+                <h2 style="margin-bottom: 20px;">Hôpitaux Disponibles</h2>
+                
+                <div class="search-bar">
+                    <input type="text" id="hospitalSearch" placeholder="Rechercher un hôpital..." onkeyup="filterHospitals()">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-chips" id="hospitalFilters">
+                    <div class="chip active" data-filter="all">Tous</div>
+                    <div class="chip" data-filter="kinshasa">Kinshasa</div>
+                    <div class="chip" data-filter="lubumbashi">Lubumbashi</div>
+                    <div class="chip" data-filter="mbuji-mayi">Mbuji-Mayi</div>
+                    <div class="chip" data-filter="kisangani">Kisangani</div>
+                    <div class="chip" data-filter="goma">Goma</div>
+                    <div class="chip" data-filter="bukavu">Bukavu</div>
+                </div>
+
+                <div class="search-results" id="hospitalResults">
+                    <!-- Hôpitaux de Kinshasa -->
+                    <div class="card hospital-item" data-city="kinshasa">
+                        <div class="card-header">
+                            <img src="./hosp1.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Hôpital Général de Kinshasa</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Kinshasa, Gombe</p>
+                                <div class="rating">★★★★★ (4.8)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Centre médical général avec services d'urgence 24/7</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('general')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card hospital-item" data-city="kinshasa">
+                        <div class="card-header">
+                            <img src="./hospital2.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Clinique Ngaliema</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Kinshasa, Ngaliema</p>
+                                <div class="rating">★★★★☆ (4.5)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Spécialisé en chirurgie et maternité</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('ngaliema')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hôpitaux de Lubumbashi -->
+                    <div class="card hospital-item" data-city="lubumbashi">
+                        <div class="card-header">
+                            <img src="./hospital3.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Centre Médical de Lubumbashi</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Lubumbashi</p>
+                                <div class="rating">★★★★★ (4.9)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Services pédiatriques et consultations externes</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('lubumbashi')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hôpitaux de Mbuji-Mayi -->
+                    <div class="card hospital-item" data-city="mbuji-mayi">
+                        <div class="card-header">
+                            <img src="./hospital4.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Hôpital Provincial du Kasaï Oriental</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Mbuji-Mayi</p>
+                                <div class="rating">★★★★☆ (4.3)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Hôpital de référence régionale avec services complets</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('kasai-oriental')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hôpitaux de Kisangani -->
+                    <div class="card hospital-item" data-city="kisangani">
+                        <div class="card-header">
+                            <img src="./hospital5.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Hôpital Général de Kisangani</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Kisangani</p>
+                                <div class="rating">★★★★☆ (4.4)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Centre médical moderne au cœur de la Tshopo</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('kisangani')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Plus d'hôpitaux... -->
+                    <div class="card hospital-item" data-city="goma">
+                        <div class="card-header">
+                            <img src="./hospital6.jpeg" alt="Hôpital">
+                            <div class="card-info">
+                                <h3>Hôpital de Référence de Goma</h3>
+                                <p><i class="fas fa-map-marker-alt"></i> Goma, Nord-Kivu</p>
+                                <div class="rating">★★★★★ (4.7)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Centre de traumatologie et soins d'urgence</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="showHospitalDetails('goma')">Détails</button>
+                            <button class="btn btn-small btn-outline" onclick="showNotification('Ouverture de Google Maps...')">
+                                <i class="fas fa-map-marker-alt"></i> Carte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCTORS PAGE -->
+            <div class="page" id="doctors">
+                <h2 style="margin-bottom: 20px;">Nos Médecins</h2>
+                
+                <div class="search-bar">
+                    <input type="text" id="doctorSearch" placeholder="Rechercher un médecin..." onkeyup="filterDoctors()">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-chips" id="doctorFilters">
+                    <div class="chip active" data-filter="all">Tous</div>
+                    <div class="chip" data-filter="virtuel">Virtuel</div>
+                    <div class="chip" data-filter="physique">Physique</div>
+                    <div class="chip" data-filter="urgence">Urgence</div>
+                    <div class="chip" data-filter="cardio">Cardiologie</div>
+                    <div class="chip" data-filter="pediatrie">Pédiatrie</div>
+                </div>
+
+                <div class="search-results" id="doctorResults">
+                    <!-- Docteur 1 -->
+                    <div class="doctor-portfolio doctor-item" data-type="physique" data-specialty="cardio">
+                        <div class="card-header">
+                            <img src="./WhatsApp Image 2025-10-07 at 3.00.57 PM (1).jpeg" alt="Docteur">
+                            <div class="card-info">
+                                <h3>Dr. Jephte Mulegwa</h3>
+                                <p>Cardiologue - 15 ans d'expérience</p>
+                                <p style="font-size: 11px; color: #999;">Hôpital Général de Kinshasa</p>
+                                <span class="badge badge-success">Disponible</span>
+                            </div>
+                        </div>
+                        <div class="doctor-stats">
+                            <div class="doctor-stat">
+                                <h4>2.5K+</h4>
+                                <p>Patients</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>98%</h4>
+                                <p>Satisfaction</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>15</h4>
+                                <p>Années Exp.</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Spécialiste en cardiologie interventionnelle et prévention des maladies cardiaques.</p>
+                        <button class="btn" onclick="bookDoctor('samuel kabeya')">Prendre Rendez-vous</button>
+                    </div>
+
+                    <!-- Docteur 2 -->
+                    <div class="doctor-portfolio doctor-item" data-type="virtuel" data-specialty="pediatrie">
+                        <div class="card-header">
+                            <img src="./elsamuel.jpeg" alt="Docteur">
+                            <div class="card-info">
+                                <h3>Dr. Samuel Kabeya</h3>
+                                <p>Pédiatre - 12 ans d'expérience</p>
+                                <p style="font-size: 11px; color: #999;">Clinique Ngaliema</p>
+                                <span class="badge badge-success">Disponible</span>
+                            </div>
+                        </div>
+                        <div class="doctor-stats">
+                            <div class="doctor-stat">
+                                <h4>3.2K+</h4>
+                                <p>Enfants</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>99%</h4>
+                                <p>Satisfaction</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>12</h4>
+                                <p>Années Exp.</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Spécialiste en pédiatrie générale et vaccination. Consultations à domicile disponibles.</p>
+                        <button class="btn" onclick="bookDoctor('marie-lundula')">Prendre Rendez-vous</button>
+                    </div>
+
+                    <!-- Docteur 3 -->
+                    <div class="doctor-portfolio doctor-item" data-type="urgence" data-specialty="general">
+                        <div class="card-header">
+                            <img src="./sarah.jpeg" alt="Docteur">
+                            <div class="card-info">
+                                <h3>Dr. Sarah Denissia</h3>
+                                <p>Généraliste - 8 ans d'expérience</p>
+                                <p style="font-size: 11px; color: #999;">Centre Médical de Lubumbashi</p>
+                                <span class="badge badge-warning">Occupé</span>
+                            </div>
+                        </div>
+                        <div class="doctor-stats">
+                            <div class="doctor-stat">
+                                <h4>5K+</h4>
+                                <p>Patients</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>96%</h4>
+                                <p>Satisfaction</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>8</h4>
+                                <p>Années Exp.</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Médecin généraliste spécialisé en médecine d'urgence et soins primaires.</p>
+                        <button class="btn" onclick="bookDoctor('patrick-mbuyi')">Prendre Rendez-vous</button>
+                    </div>
+
+                    <!-- Docteur 4 -->
+                    <div class="doctor-portfolio doctor-item" data-type="physique" data-specialty="chirurgie">
+                        <div class="card-header">
+                            <img src="./plamedie.jpeg" alt="Docteur">
+                            <div class="card-info">
+                                <h3>Dr. Plamedia Nk</h3>
+                                <p>Chirurgienne - 10 ans d'expérience</p>
+                                <p style="font-size: 11px; color: #999;">Hôpital Provincial du Kasaï Oriental</p>
+                                <span class="badge badge-success">Disponible</span>
+                            </div>
+                        </div>
+                        <div class="doctor-stats">
+                            <div class="doctor-stat">
+                                <h4>1.8K+</h4>
+                                <p>Opérations</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>97%</h4>
+                                <p>Réussite</p>
+                            </div>
+                            <div class="doctor-stat">
+                                <h4>10</h4>
+                                <p>Années Exp.</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Chirurgienne générale spécialisée en chirurgie mini-invasive.</p>
+                        <button class="btn" onclick="bookDoctor('sarah-kabasele')">Prendre Rendez-vous</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APPOINTMENT PAGE -->
+            <div class="page" id="appointment">
+                <h2 style="margin-bottom: 20px;">Prendre Rendez-vous</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Type de Consultation</h3>
+                    <div class="tabs" id="consultationType">
+                        <div class="tab active" data-type="physique">Physique</div>
+                        <div class="tab" data-type="virtuelle">Virtuelle</div>
+                        <div class="tab" data-type="urgence">Urgence</div>
+                    </div>
+
+                    <h3 style="margin: 20px 0 15px 0;">Sélectionner une Date</h3>
+                    <div class="calendar-header">
+                        <button class="calendar-nav" onclick="changeMonth(-1)">‹</button>
+                        <h4 id="currentMonth">Octobre 2025</h4>
+                        <button class="calendar-nav" onclick="changeMonth(1)">›</button>
+                    </div>
+                    <div class="calendar" id="appointmentCalendar">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+
+                    <h3 style="margin: 20px 0 15px 0;">Heure</h3>
+                    <div class="time-slots" id="timeSlots">
+                        <!-- Time slots will be generated by JavaScript -->
+                    </div>
+
+                    <button class="btn" id="confirmAppointment" onclick="confirmAppointment()">Confirmer Rendez-vous</button>
+                </div>
+            </div>
+
+            <!-- EMERGENCY PAGE -->
+            <div class="page" id="emergency">
+                <h2 style="margin-bottom: 20px;">Services d'Urgence</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Appel d'Urgence</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">En cas d'urgence médicale, contactez immédiatement les services d'urgence.</p>
+                    
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 48px; color: #f5576c; margin-bottom: 10px;">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3 style="font-size: 24px; color: #f5576c;">112</h3>
+                        <p style="font-size: 14px; color: #666;">Numéro d'urgence national</p>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="makeEmergencyCall()">
+                        <i class="fas fa-phone-alt" style="margin-right: 10px;"></i>
+                        Appeler le 112
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Demande de Visite d'Urgence</h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 600;">Type d'urgence</label>
+                        <select class="search-bar input" style="width: 100%; padding: 12px; border-radius: 10px;" id="emergencyType">
+                            <option value="">Sélectionnez le type d'urgence</option>
+                            <option value="cardiac">Problème cardiaque</option>
+                            <option value="respiratory">Difficulté respiratoire</option>
+                            <option value="accident">Accident</option>
+                            <option value="fever">Fièvre élevée</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 600;">Description</label>
+                        <textarea class="search-bar input" style="width: 100%; padding: 12px; border-radius: 10px; height: 100px; resize: none;" placeholder="Décrivez les symptômes..." id="emergencyDescription"></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 600;">Localisation</label>
+                        <input type="text" class="search-bar input" style="width: 100%; padding: 12px; border-radius: 10px;" placeholder="Adresse exacte..." id="emergencyLocation">
+                    </div>
+
+                    <h4 style="margin: 20px 0 10px 0;">Méthode de Paiement</h4>
+                    <div class="payment-methods" id="emergencyPayment">
+                        <div class="payment-method" data-method="cash">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h4>Espèces</h4>
+                        </div>
+                        <div class="payment-method" data-method="mobile">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h4>Mobile Money</h4>
+                        </div>
+                        <div class="payment-method" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            <h4>Carte</h4>
+                        </div>
+                        <div class="payment-method" data-method="insurance">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Assurance</h4>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="requestEmergencyVisit()">
+                        <i class="fas fa-ambulance" style="margin-right: 10px;"></i>
+                        Demander une Visite d'Urgence
+                    </button>
+                </div>
+            </div>
+
+            <!-- WELLNESS PAGE -->
+            <div class="page" id="wellness">
+                <h2 style="margin-bottom: 20px;">Bien-être et Prévention</h2>
+                
+                <div class="tabs" id="wellnessTabs">
+                    <div class="tab active" data-tab="categories">Catégories</div>
+                    <div class="tab" data-tab="nutrition">Nutrition</div>
+                    <div class="tab" data-tab="exercise">Exercice</div>
+                    <div class="tab" data-tab="mental">Santé Mentale</div>
+                </div>
+
+                <div id="wellnessContent">
+                    <!-- Content will be loaded dynamically based on tab selection -->
+                </div>
+            </div>
+
+            <!-- ARTICLES PAGE -->
+            <div class="page" id="articles">
+                <h2 style="margin-bottom: 20px;">Articles de Santé</h2>
+                
+                <div class="search-bar">
+                    <input type="text" id="articleSearch" placeholder="Rechercher un article..." onkeyup="filterArticles()">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="filter-chips" id="articleFilters">
+                    <div class="chip active" data-filter="all">Tous</div>
+                    <div class="chip" data-filter="nutrition">Nutrition</div>
+                    <div class="chip" data-filter="prevention">Prévention</div>
+                    <div class="chip" data-filter="diseases">Maladies</div>
+                    <div class="chip" data-filter="mental">Santé Mentale</div>
+                    <div class="chip" data-filter="children">Enfants</div>
+                    <div class="chip" data-filter="skin">Peau</div>
+                </div>
+
+                <div class="article-grid" id="articleResults">
+                    <!-- Articles will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div class="page" id="profile">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2>Alric Nguema</h2>
+                    <p>Patient depuis 2024</p>
+                </div>
+
+                <div class="tabs" id="profileTabs">
+                    <div class="tab active" data-tab="visits">Visites</div>
+                    <div class="tab" data-tab="benefits">Avantages</div>
+                    <div class="tab" data-tab="expenses">Dépenses</div>
+                    <div class="tab" data-tab="history">Historique</div>
+                    <div class="tab" data-tab="info">Informations</div>
+                </div>
+
+                <div id="profileContent">
+                    <!-- Content will be loaded dynamically based on tab selection -->
+                </div>
+            </div>
+
+            <!-- ADMIN DASHBOARD -->
+            <div class="page" id="admin">
+                <h2 style="margin-bottom: 20px;">Tableau de Bord Administrateur</h2>
+                
+                <div class="admin-stats">
+                    <div class="admin-stat">
+                        <h3>1,248</h3>
+                        <p>Patients Actifs</p>
+                    </div>
+                    <div class="admin-stat">
+                        <h3>542</h3>
+                        <p>Rendez-vous Aujourd'hui</p>
+                    </div>
+                    <div class="admin-stat">
+                        <h3>89</h3>
+                        <p>Urgences en Cours</p>
+                    </div>
+                    <div class="admin-stat">
+                        <h3>24</h3>
+                        <p>Médecins Connectés</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Statistiques des Hôpitaux</h3>
+                    <div class="chart-placeholder">
+                        <p>Graphique d'occupation des hôpitaux</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Rendez-vous Récent</h3>
+                    <div class="admin-table">
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Hôpital</th>
+                                    <th>Heure</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Elie Stone</td>
+                                    <td>Hôpital Général</td>
+                                    <td>10:00</td>
+                                    <td><span class="badge badge-success">Confirmé</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Jonathan Bosingwa</td>
+                                    <td>Clinique Ngaliema</td>
+                                    <td>11:30</td>
+                                    <td><span class="badge badge-warning">En attente</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Anicet Baraka</td>
+                                    <td>Centre Médical</td>
+                                    <td>14:15</td>
+                                    <td><span class="badge badge-success">Confirmé</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Jourmedi Neta</td>
+                                    <td>Hôpital Général</td>
+                                    <td>16:00</td>
+                                    <td><span class="badge badge-danger">Annulé</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHAT PAGE -->
+            <div class="page" id="chat">
+                <h2 style="margin-bottom: 20px;">Chat avec Médecin</h2>
+                
+                <div class="card">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-bubble">
+                                Bonjour, je suis le Dr. samuel kabeya. Comment puis-je vous aider aujourd'hui?
+                            </div>
+                        </div>
+                        <div class="message sent">
+                            <div class="message-bubble">
+                                Bonjour Docteur, j'ai des maux de tête depuis deux jours.
+                            </div>
+                        </div>
+                        <div class="message received">
+                            <div class="message-bubble">
+                                Je vois. Avez-vous de la fièvre ou d'autres symptômes?
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <input type="text" placeholder="Tapez votre message..." id="chatInput" onkeypress="handleChatInput(event)">
+                        <button class="btn" onclick="sendMessage()" id="sendMessageBtn">
+                            <span id="sendText">Envoyer</span>
+                            <span id="sendLoading" class="loading" style="display: none;"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="navigateTo('home')">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" onclick="navigateTo('hospitals')">
+                <i class="fas fa-hospital"></i>
+                <span>Hôpitaux</span>
+            </div>
+            <div class="nav-item" onclick="navigateTo('doctors')">
+                <i class="fas fa-user-md"></i>
+                <span>Médecins</span>
+            </div>
+            <div class="nav-item" onclick="navigateTo('appointment')">
+                <i class="fas fa-calendar-check"></i>
+                <span>Rendez-vous</span>
+            </div>
+            <div class="nav-item" onclick="navigateTo('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOSPITAL DETAILS MODAL -->
+    <div class="modal" id="hospitalModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('hospitalModal')">&times;</span>
+            <div id="hospitalModalContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE DETAILS MODAL -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('articleModal')">&times;</span>
+            <div id="articleModalContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification">
+        <div id="notificationMessage"></div>
+    </div>
+
+    <script>
+        // Données étendues de l'application
+        const appData = {
+            currentDate: new Date(2023, 9, 1),
+            selectedDate: null,
+            selectedTime: null,
+            selectedPayment: null,
+            currentDoctor: null,
+            
+            hospitals: {
+                'general': {
+                    name: 'Hôpital Général de Kinshasa',
+                    rating: '★★★★★ (4.8)',
+                    reviews: '248 avis',
+                    description: 'Centre médical général de référence avec services d\'urgence 24/7, unité de soins intensifs et toutes les spécialités médicales.',
+                    services: [
+                        'Urgences 24/7',
+                        'Chirurgie générale et spécialisée',
+                        'Maternité et pédiatrie',
+                        'Cardiologie et unité coronarienne',
+                        'Laboratoire d\'analyses médicales',
+                        'Imagerie médicale (IRM, Scanner, Échographie)'
+                    ],
+                    contact: {
+                        address: 'Avenue de la Justice, Gombe, Kinshasa',
+                        phone: '+254 76 895 2583',
+                        map: 'https://maps.google.com/?q=Hôpital+Général+de+Kinshasa'
+                    }
+                },
+                'ngaliema': {
+                    name: 'Clinique Ngaliema',
+                    rating: '★★★★☆ (4.5)',
+                    reviews: '189 avis',
+                    description: 'Établissement spécialisé en chirurgie et maternité avec des équipements modernes et un personnel qualifié.',
+                    services: [
+                        'Chirurgie générale',
+                        'Maternité et néonatalogie',
+                        'Consultations spécialisées',
+                        'Radiologie',
+                        'Laboratoire',
+                        'Pharmacie'
+                    ],
+                    contact: {
+                        address: 'Commune de Ngaliema, Kinshasa',
+                        phone: '+243 10 515 2874',
+                        map: 'https://maps.google.com/?q=Clinique+Ngaliema+Kinshasa'
+                    }
+                },
+                'lubumbashi': {
+                    name: 'Centre Médical de Lubumbashi',
+                    rating: '★★★★★ (4.9)',
+                    reviews: '156 avis',
+                    description: 'Centre médical moderne spécialisé en pédiatrie et consultations externes avec des médecins expérimentés.',
+                    services: [
+                        'Pédiatrie',
+                        'Consultations externes',
+                        'Vaccinations',
+                        'Analyses médicales',
+                        'Imagerie diagnostique',
+                        'Urgences pédiatriques'
+                    ],
+                    contact: {
+                        address: 'Centre-ville, Lubumbashi',
+                        phone: '+254 71 612 5353',
+                        map: 'https://maps.google.com/?q=Centre+Médical+de+Lubumbashi'
+                    }
+                },
+                'kasai-oriental': {
+                    name: 'Hôpital Provincial du Kasaï Oriental',
+                    rating: '★★★★☆ (4.3)',
+                    reviews: '134 avis',
+                    description: 'Hôpital de référence régionale offrant des services médicaux complets pour la province du Kasaï Oriental.',
+                    services: [
+                        'Médecine générale',
+                        'Chirurgie',
+                        'Pédiatrie',
+                        'Gynécologie',
+                        'Urgences',
+                        'Imagerie médicale'
+                    ],
+                    contact: {
+                        address: 'Avenue Lumumba, Mbuji-Mayi',
+                        phone: '+254 79 532 1182',
+                        map: 'https://maps.google.com/?q=Hôpital+Provincial+Kasaï+Oriental'
+                    }
+                },
+                'kisangani': {
+                    name: 'Hôpital Général de Kisangani',
+                    rating: '★★★★☆ (4.4)',
+                    reviews: '145 avis',
+                    description: 'Centre médical moderne au cœur de la Tshopo offrant des soins de qualité à la population.',
+                    services: [
+                        'Médecine interne',
+                        'Chirurgie',
+                        'Pédiatrie',
+                        'Urgences 24/7',
+                        'Laboratoire',
+                        'Radiologie'
+                    ],
+                    contact: {
+                        address: 'Quartier Mangobo, Kisangani',
+                        phone: '+254 74 232 3161',
+                        map: 'https://maps.google.com/?q=Hôpital+Général+de+Kisangani'
+                    }
+                },
+                'goma': {
+                    name: 'Hôpital de Référence de Goma',
+                    rating: '★★★★★ (4.7)',
+                    reviews: '167 avis',
+                    description: 'Centre de traumatologie et soins d\'urgence spécialisé dans la prise en charge des cas complexes.',
+                    services: [
+                        'Traumatologie',
+                        'Chirurgie d\'urgence',
+                        'Soins intensifs',
+                        'Radiologie interventionnelle',
+                        'Laboratoire',
+                        'Banque de sang'
+                    ],
+                    contact: {
+                        address: 'Avenue du Lac, Goma',
+                        phone: '+254 76 806 2600',
+                        map: 'https://maps.google.com/?q=Hôpital+de+Référence+de+Goma'
+                    }
+                }
+            },
+            
+            articles: {
+                'nutrition-basics': {
+                    title: 'Les Bases d\'une Alimentation Équilibrée',
+                    author: 'Nutritionniste Anicet Baraka',
+                    date: '15 Oct 2025',
+                    category: 'nutrition',
+                    content: `
+                        <h2>Les Fondements d'une Bonne Nutrition</h2>
+                        <p>Une alimentation équilibrée est essentielle pour maintenir une bonne santé et prévenir les maladies.</p>
+                        
+                        <h3>Les Macronutriments Essentiels</h3>
+                        <p><strong>Protéines:</strong> Bâtisseurs des muscles et tissus. Sources: viande, poisson, œufs, légumineuses.</p>
+                        <p><strong>Glucides:</strong> Source d'énergie principale. Sources: céréales complètes, fruits, légumes.</p>
+                        <p><strong>Lipides:</strong> Énergie et absorption des vitamines. Sources: huiles végétales, noix, avocat.</p>
+                        
+                        <h3>Les Micronutriments Importants</h3>
+                        <p>Vitamines et minéraux sont essentiels en petites quantités pour le bon fonctionnement de l'organisme.</p>
+                        
+                        <h3>Conseils Pratiques</h3>
+                        <ul>
+                            <li>Manger 5 portions de fruits et légumes par jour</li>
+                            <li>Privilégier les céréales complètes</li>
+                            <li>Limiter les sucres ajoutés</li>
+                            <li>Boire 1.5 à 2 litres d'eau par jour</li>
+                        </ul>
+                    `
+                },
+                'weight-management': {
+                    title: 'Gestion du Poids: Conseils et Stratégies',
+                    author: 'Dr. Kairos MK',
+                    date: '12 Oct 2023',
+                    category: 'nutrition',
+                    content: `
+                        <h2>Maîtriser son Poids de Façon Saine</h2>
+                        <p>La gestion du poids est un équilibre entre alimentation et activité physique.</p>
+                        
+                        <h3>Calcul de l'IMC</h3>
+                        <p>L'Indice de Masse Corporelle aide à évaluer votre poids santé.</p>
+                        
+                        <h3>Stratégies Efficaces</h3>
+                        <ul>
+                            <li>Déficit calorique modéré</li>
+                            <li>Activité physique régulière</li>
+                            <li>Aliments riches en fibres</li>
+                            <li>Régularité des repas</li>
+                        </ul>
+                        
+                        <h3>À Éviter</h3>
+                        <p>Les régimes draconiens et les produits miracles qui promettent une perte de poids rapide.</p>
+                    `
+                },
+                'sleep-health': {
+                    title: 'L\'Importance du Sommeil Réparateur',
+                    author: 'Dr. Jephte Mulegwa',
+                    date: '10 Oct 2023',
+                    category: 'mental',
+                    content: `
+                        <h2>Un Sommeil de Qualité pour une Meilleure Santé</h2>
+                        <p>Le sommeil est essentiel pour la récupération physique et mentale.</p>
+                        
+                        <h3>Les Cycles du Sommeil</h3>
+                        <p>Comprendre les différentes phases pour optimiser votre repos.</p>
+                        
+                        <h3>Conseils pour Mieux Dormir</h3>
+                        <ul>
+                            <li>Heure de coucher régulière</li>
+                            <li>Environnement calme et obscur</li>
+                            <li>Éviter les écrans avant de dormir</li>
+                            <li>Température ambiante fraîche</li>
+                        </ul>
+                    `
+                },
+                'stress-management': {
+                    title: 'Techniques de Gestion du Stress',
+                    author: 'Psychologue Samel Kabeya',
+                    date: '8 Oct 2023',
+                    category: 'mental',
+                    content: `
+                        <h2>Apprivoiser le Stress Quotidien</h2>
+                        <p>Des techniques simples pour réduire l'impact du stress sur votre santé.</p>
+                        
+                        <h3>Respiration Profonde</h3>
+                        <p>Une méthode rapide pour calmer le système nerveux.</p>
+                        
+                        <h3>Méditation et Pleine Conscience</h3>
+                        <p>Pratiques efficaces pour développer la résilience au stress.</p>
+                    `
+                },
+                'children-health': {
+                    title: 'Santé de l\'Enfant: Prévention et Soins',
+                    author: 'Dr. Alric Nguema',
+                    date: '5 Oct 2023',
+                    category: 'children',
+                    content: `
+                        <h2>Prendre Soin de la Santé de nos Enfants</h2>
+                        <p>La prévention et les soins précoces sont essentiels pour le développement des enfants.</p>
+                        
+                        <h3>Vaccination</h3>
+                        <p>Le calendrier vaccinal à respecter pour une protection optimale.</p>
+                        
+                        <h3>Nutrition Infantile</h3>
+                        <p>Les besoins spécifiques des enfants en croissance.</p>
+                    `
+                },
+                'skin-care': {
+                    title: 'Soins de la Peau: Conseils Essentiels',
+                    author: 'Dermatologue Sarah Rychcaelle',
+                    date: '3 Oct 2024',
+                    category: 'skin',
+                    content: `
+                        <h2>Une Peau Saine pour une Vie Saine</h2>
+                        <p>Prendre soin de sa peau est important à tout âge.</p>
+                        
+                        <h3>Protection Solaire</h3>
+                        <p>Essentielle pour prévenir le vieillissement cutané et les cancers de la peau.</p>
+                        
+                        <h3>Hydratation</h3>
+                        <p>Maintenir une barrière cutanée saine grâce à une hydratation régulière.</p>
+                    `
+                }
+            },
+            
+            doctors: {
+                'jonathan-kabamba': {
+                    name: 'Dr. Jonathan B',
+                    specialty: 'Cardiologue',
+                    hospital: 'Hôpital Général de Kinshasa',
+                    experience: '15 ans',
+                    patients: '2500+',
+                    satisfaction: '98%'
+                },
+                'sarah-denissia': {
+                    name: 'Dr. Sarah Denissia',
+                    specialty: 'Pédiatre',
+                    hospital: 'Clinique Ngaliema',
+                    experience: '12 ans',
+                    patients: '3200+',
+                    satisfaction: '99%'
+                },
+                'samuel-kabeya': {
+                    name: 'Dr. Samuel Kabeya',
+                    specialty: 'Généraliste',
+                    hospital: 'Centre Médical de Lubumbashi',
+                    experience: '8 ans',
+                    patients: '5000+',
+                    satisfaction: '96%'
+                },
+                'stone-elie': {
+                    name: 'Dr. Elie Stone',
+                    specialty: 'Chirurgienne',
+                    hospital: 'Hôpital Provincial du Kasaï Oriental',
+                    experience: '10 ans',
+                    patients: '1800+',
+                    satisfaction: '97%'
+                }
+            },
+
+            profileData: {
+                visits: [
+                    {
+                        doctor: 'Dr. Plamedie Nk',
+                        date: '10 Oct 2023',
+                        reason: 'Consultation cardiologie',
+                        status: 'Terminée'
+                    },
+                    {
+                        doctor: 'Dr. Jourmedie Neta',
+                        date: '28 Sep 2023',
+                        reason: 'Vaccination grippe',
+                        status: 'Terminée'
+                    },
+                    {
+                        doctor: 'Dr. Luc Nguema',
+                        date: '15 Août 2023',
+                        reason: 'Analyse sanguine',
+                        status: 'Terminée'
+                    }
+                ],
+                benefits: [
+                    {
+                        title: 'Consultations Illimitées',
+                        description: 'Accès à toutes les consultations médicales'
+                    },
+                    {
+                        title: 'Analyses de Laboratoire',
+                        description: '50% de réduction sur les analyses'
+                    },
+                    {
+                        title: 'Médicaments',
+                        description: '20% de réduction en pharmacie partenaire'
+                    },
+                    {
+                        title: 'Urgences',
+                        description: 'Prise en charge prioritaire aux urgences'
+                    }
+                ],
+                expenses: [
+                    {
+                        description: 'Consultation Cardiologie',
+                        amount: '25,000 FC',
+                        date: '10 Oct 2024'
+                    },
+                    {
+                        description: 'Analyse Sanguine',
+                        amount: '15,000 FC',
+                        date: '15 Août 2024'
+                    },
+                    {
+                        description: 'Vaccination Grippe',
+                        amount: '8,000 FC',
+                        date: '28 Sep 2024'
+                    }
+                ],
+                medicalHistory: [
+                    {
+                        condition: 'Hypertension artérielle',
+                        diagnosisDate: '2021',
+                        status: 'Sous contrôle'
+                    },
+                    {
+                        condition: 'Allergie saisonnière',
+                        diagnosisDate: '2020',
+                        status: 'Gérée'
+                    }
+                ]
+            }
+        };
+
+        // Navigation entre les pages
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (pageId === 'appointment') {
+                initializeCalendar();
+                initializeTimeSlots();
+            } else if (pageId === 'wellness') {
+                loadWellnessContent('categories');
+            } else if (pageId === 'profile') {
+                loadProfileContent('visits');
+            } else if (pageId === 'articles') {
+                loadArticles();
+            }
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            for (let i = 0; i < navItems.length; i++) {
+                if (navItems[i].getAttribute('onclick') === `navigateTo('${pageId}')`) {
+                    navItems[i].classList.add('active');
+                    break;
+                }
+            }
+        }
+
+        // Fonctions de recherche et filtrage
+        function filterHospitals() {
+            const searchTerm = document.getElementById('hospitalSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('#hospitalFilters .chip.active').dataset.filter;
+            const hospitals = document.querySelectorAll('.hospital-item');
+            let visibleCount = 0;
+
+            hospitals.forEach(hospital => {
+                const name = hospital.querySelector('h3').textContent.toLowerCase();
+                const city = hospital.dataset.city;
+                const matchesSearch = name.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || city === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    hospital.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    hospital.style.display = 'none';
+                }
+            });
+
+            const resultsContainer = document.getElementById('hospitalResults');
+            let noResults = resultsContainer.querySelector('.no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>Aucun hôpital trouvé</h3>
+                        <p>Essayez de modifier vos critères de recherche</p>
+                    `;
+                    resultsContainer.appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
+        }
+
+        function filterDoctors() {
+            const searchTerm = document.getElementById('doctorSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('#doctorFilters .chip.active').dataset.filter;
+            const doctors = document.querySelectorAll('.doctor-item');
+            let visibleCount = 0;
+
+            doctors.forEach(doctor => {
+                const name = doctor.querySelector('h3').textContent.toLowerCase();
+                const type = doctor.dataset.type;
+                const specialty = doctor.dataset.specialty;
+                const matchesSearch = name.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || type === activeFilter || specialty === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    doctor.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    doctor.style.display = 'none';
+                }
+            });
+
+            const resultsContainer = document.getElementById('doctorResults');
+            let noResults = resultsContainer.querySelector('.no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>Aucun médecin trouvé</h3>
+                        <p>Essayez de modifier vos critères de recherche</p>
+                    `;
+                    resultsContainer.appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
+        }
+
+        function filterArticles() {
+            const searchTerm = document.getElementById('articleSearch').value.toLowerCase();
+            const activeFilter = document.querySelector('#articleFilters .chip.active').dataset.filter;
+            const articles = document.querySelectorAll('.article-item');
+            let visibleCount = 0;
+
+            articles.forEach(article => {
+                const title = article.querySelector('h3').textContent.toLowerCase();
+                const category = article.dataset.category;
+                const matchesSearch = title.includes(searchTerm);
+                const matchesFilter = activeFilter === 'all' || category === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    article.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+
+            const resultsContainer = document.getElementById('articleResults');
+            let noResults = resultsContainer.querySelector('.no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <h3>Aucun article trouvé</h3>
+                        <p>Essayez de modifier vos critères de recherche</p>
+                    `;
+                    resultsContainer.appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
+        }
+
+        // Système de calendrier
+        function initializeCalendar() {
+            renderCalendar();
+        }
+
+        function changeMonth(direction) {
+            appData.currentDate.setMonth(appData.currentDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const calendar = document.getElementById('appointmentCalendar');
+            const monthYear = document.getElementById('currentMonth');
+            
+            const options = { year: 'numeric', month: 'long' };
+            monthYear.textContent = appData.currentDate.toLocaleDateString('fr-FR', options);
+            
+            calendar.innerHTML = '';
+            
+            const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+            days.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.style.fontWeight = '600';
+                dayElement.style.fontSize = '11px';
+                dayElement.textContent = day;
+                calendar.appendChild(dayElement);
+            });
+            
+            const firstDay = new Date(appData.currentDate.getFullYear(), appData.currentDate.getMonth(), 1);
+            const startingDay = firstDay.getDay();
+            
+            const daysInMonth = new Date(appData.currentDate.getFullYear(), appData.currentDate.getMonth() + 1, 0).getDate();
+            
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day disabled';
+                calendar.appendChild(emptyDay);
+            }
+            
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = i;
+                
+                const currentDate = new Date(appData.currentDate.getFullYear(), appData.currentDate.getMonth(), i);
+                if (currentDate.toDateString() === today.toDateString()) {
+                    dayElement.style.fontWeight = 'bold';
+                    dayElement.style.color = '#4facfe';
+                }
+                
+                if (appData.selectedDate && 
+                    currentDate.getDate() === appData.selectedDate.getDate() &&
+                    currentDate.getMonth() === appData.selectedDate.getMonth() &&
+                    currentDate.getFullYear() === appData.selectedDate.getFullYear()) {
+                    dayElement.classList.add('selected');
+                }
+                
+                if (currentDate < today) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    dayElement.addEventListener('click', () => selectDate(i));
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(day) {
+            appData.selectedDate = new Date(appData.currentDate.getFullYear(), appData.currentDate.getMonth(), day);
+            renderCalendar();
+            initializeTimeSlots();
+            showNotification(`Date sélectionnée: ${appData.selectedDate.toLocaleDateString('fr-FR')}`);
+        }
+
+        function initializeTimeSlots() {
+            const timeSlots = document.getElementById('timeSlots');
+            timeSlots.innerHTML = '';
+            
+            if (!appData.selectedDate) {
+                const message = document.createElement('div');
+                message.style.gridColumn = '1 / span 3';
+                message.style.textAlign = 'center';
+                message.style.color = '#666';
+                message.textContent = 'Veuillez sélectionner une date d\'abord';
+                timeSlots.appendChild(message);
+                return;
+            }
+            
+            const slots = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'];
+            
+            slots.forEach(slot => {
+                const slotElement = document.createElement('div');
+                slotElement.className = 'time-slot';
+                slotElement.textContent = slot;
+                
+                if (appData.selectedTime === slot) {
+                    slotElement.classList.add('selected');
+                }
+                
+                slotElement.addEventListener('click', () => selectTimeSlot(slot, slotElement));
+                timeSlots.appendChild(slotElement);
+            });
+        }
+
+        function selectTimeSlot(time, element) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            appData.selectedTime = time;
+            
+            showNotification(`Créneau horaire sélectionné: ${time}`);
+        }
+
+        // Fonctions de réservation
+        function bookDoctor(doctorId) {
+            appData.currentDoctor = doctorId;
+            navigateTo('appointment');
+            showNotification(`Rendez-vous avec ${appData.doctors[doctorId].name}`);
+        }
+
+        function confirmAppointment() {
+            if (!appData.selectedDate || !appData.selectedTime) {
+                showNotification('Veuillez sélectionner une date et un créneau horaire', 'error');
+                return;
+            }
+            
+            const doctor = appData.currentDoctor ? appData.doctors[appData.currentDoctor].name : 'un médecin';
+            const dateStr = appData.selectedDate.toLocaleDateString('fr-FR');
+            
+            showNotification(`Rendez-vous confirmé avec ${doctor} le ${dateStr} à ${appData.selectedTime}`);
+            
+            appData.selectedDate = null;
+            appData.selectedTime = null;
+            appData.currentDoctor = null;
+            
+            setTimeout(() => {
+                navigateTo('home');
+            }, 2000);
+        }
+
+        // Fonctions d'urgence
+        function makeEmergencyCall() {
+            showNotification('Appel d\'urgence initié vers le 112...', 'warning');
+            
+            setTimeout(() => {
+                showNotification('Connexion établie avec les services d\'urgence. Restez en ligne.', 'success');
+            }, 2000);
+        }
+
+        function requestEmergencyVisit() {
+            const emergencyType = document.getElementById('emergencyType').value;
+            const description = document.getElementById('emergencyDescription').value;
+            const location = document.getElementById('emergencyLocation').value;
+            
+            if (!emergencyType || !description || !location) {
+                showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+            
+            if (!appData.selectedPayment) {
+                showNotification('Veuillez sélectionner une méthode de paiement', 'error');
+                return;
+            }
+            
+            showNotification('Demande de visite d\'urgence envoyée. Une ambulance est en route.', 'success');
+            
+            document.getElementById('emergencyType').value = '';
+            document.getElementById('emergencyDescription').value = '';
+            document.getElementById('emergencyLocation').value = '';
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.classList.remove('selected');
+            });
+            appData.selectedPayment = null;
+        }
+
+        // Fonctions des modales
+        function showHospitalDetails(hospitalId) {
+            const hospital = appData.hospitals[hospitalId];
+            const modalContent = document.getElementById('hospitalModalContent');
+            
+            modalContent.innerHTML = `
+                <h2 style="margin-bottom: 15px;">${hospital.name}</h2>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div class="rating" style="margin-right: 10px;">${hospital.rating}</div>
+                    <span style="font-size: 12px; color: #666;">${hospital.reviews}</span>
+                </div>
+                
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">${hospital.description}</p>
+                
+                <h3 style="margin-bottom: 10px;">Services</h3>
+                <ul style="font-size: 14px; color: #666; margin-bottom: 20px; padding-left: 20px;">
+                    ${hospital.services.map(service => `<li>${service}</li>`).join('')}
+                </ul>
+                
+                <h3 style="margin-bottom: 10px;">Contact</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 5px;">
+                    <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
+                    ${hospital.contact.address}
+                </p>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    <i class="fas fa-phone" style="margin-right: 10px;"></i>
+                    ${hospital.contact.phone}
+                </p>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="navigateTo('appointment'); closeModal('hospitalModal')">Prendre Rendez-vous</button>
+                    <button class="btn btn-outline" onclick="window.open('${hospital.contact.map}', '_blank')">
+                        <i class="fas fa-map-marker-alt"></i> Voir sur carte
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('hospitalModal').classList.add('active');
+        }
+
+        function showArticleModal(articleId) {
+            const article = appData.articles[articleId];
+            const modalContent = document.getElementById('articleModalContent');
+            
+            modalContent.innerHTML = `
+                <h2 style="margin-bottom: 15px;">${article.title}</h2>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; color: #666;">
+                    <span><strong>Auteur:</strong> ${article.author}</span>
+                    <span><strong>Date:</strong> ${article.date}</span>
+                </div>
+                
+                <div style="font-size: 14px; line-height: 1.6; color: #333; max-height: 400px; overflow-y: auto;">
+                    ${article.content}
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn btn-outline" onclick="closeModal('articleModal')">
+                        <i class="fas fa-times" style="margin-right: 8px;"></i>
+                        Fermer
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('articleModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Fonctions de chat
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const sendBtn = document.getElementById('sendMessageBtn');
+            const sendText = document.getElementById('sendText');
+            const sendLoading = document.getElementById('sendLoading');
+            
+            if (chatInput.value.trim() !== '') {
+                sendText.style.display = 'none';
+                sendLoading.style.display = 'inline-block';
+                sendBtn.disabled = true;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sent';
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'message-bubble';
+                bubbleDiv.textContent = chatInput.value;
+                
+                messageDiv.appendChild(bubbleDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                const userMessage = chatInput.value;
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    sendText.style.display = 'inline-block';
+                    sendLoading.style.display = 'none';
+                    sendBtn.disabled = false;
+                    
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'message received';
+                    
+                    const responseBubble = document.createElement('div');
+                    responseBubble.className = 'message-bubble';
+                    responseBubble.textContent = generateDoctorResponse(userMessage);
+                    
+                    responseDiv.appendChild(responseBubble);
+                    chatMessages.appendChild(responseDiv);
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1500);
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        function generateDoctorResponse(userMessage) {
+            const responses = [
+                "Je comprends. Pouvez-vous me décrire plus en détail vos symptômes?",
+                "Depuis combien de temps ressentez-vous ces symptômes?",
+                "Avez-vous pris des médicaments pour cela?",
+                "Ces symptômes s'aggravent-ils à certains moments de la journée?",
+                "Avez-vous des antécédents médicaux que je devrais connaître?",
+                "Je vous recommande de consulter en personne pour un examen plus approfondi.",
+                "En attendant, reposez-vous et hydratez-vous bien.",
+                "Sur une échelle de 1 à 10, comment évalueriez-vous l'intensité de vos symptômes?",
+                "Avez-vous de la fièvre en ce moment?",
+                "Ces symptômes vous empêchent-ils de vaquer à vos activités quotidiennes?"
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Fonctions de contenu dynamique
+        function loadWellnessContent(tab) {
+            const content = document.getElementById('wellnessContent');
+            
+            if (tab === 'categories') {
+                content.innerHTML = `
+                    <div class="wellness-categories">
+                        <div class="wellness-category" onclick="loadWellnessContent('nutrition')">
+                            <i class="fas fa-apple-alt"></i>
+                            <h3>Nutrition</h3>
+                        </div>
+                        <div class="wellness-category" onclick="loadWellnessContent('exercise')">
+                            <i class="fas fa-running"></i>
+                            <h3>Activité Physique</h3>
+                        </div>
+                        <div class="wellness-category" onclick="loadWellnessContent('mental')">
+                            <i class="fas fa-brain"></i>
+                            <h3>Santé Mentale</h3>
+                        </div>
+                        <div class="wellness-category" onclick="showNotification('Catégorie Sommeil sélectionnée')">
+                            <i class="fas fa-bed"></i>
+                            <h3>Sommeil</h3>
+                        </div>
+                        <div class="wellness-category" onclick="showNotification('Catégorie Arrêt du Tabac sélectionnée')">
+                            <i class="fas fa-smoking"></i>
+                            <h3>Arrêt du Tabac</h3>
+                        </div>
+                        <div class="wellness-category" onclick="showNotification('Catégorie Réduction d\'Alcool sélectionnée')">
+                            <i class="fas fa-wine-glass-alt"></i>
+                            <h3>Réduction d'Alcool</h3>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Programme de Bien-être du Mois</h3>
+                        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 15px; color: white; text-align: center;">
+                            <h4 style="font-size: 18px; margin-bottom: 10px;">Défi Marche de 10 000 Pas</h4>
+                            <p style="font-size: 14px; margin-bottom: 15px;">Relevez le défi et améliorez votre santé cardiovasculaire</p>
+                            <button class="btn" style="background: white; color: #4facfe;" onclick="showNotification('Félicitations! Vous avez rejoint le défi marche.')">Participer</button>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'nutrition') {
+                content.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Nutrition et Alimentation Saine</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">🍎 Les Bases de la Nutrition</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Comprendre les macronutriments et micronutriments essentiels.</p>
+                            <button class="btn btn-small" onclick="showArticleModal('nutrition-basics')">Lire l'article</button>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">⚖️ Gestion du Poids</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Stratégies saines pour maintenir un poids équilibré.</p>
+                            <button class="btn btn-small" onclick="showArticleModal('weight-management')">Lire l'article</button>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">💧 Hydratation</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">L'importance de l'hydratation pour la santé.</p>
+                            <button class="btn btn-small" onclick="showNotification('Article sur l\\'hydratation en cours de préparation')">Bientôt disponible</button>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'exercise') {
+                content.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Activité Physique et Exercice</h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #4facfe; margin-bottom: 5px;">🏃‍♂️ Exercices à Domicile</h4>
+                            <p style="font-size: 14px; color: #666;">Routines simples pour rester actif sans équipement.</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #4facfe; margin-bottom: 5px;">💪 Renforcement Musculaire</h4>
+                            <p style="font-size: 14px; color: #666;">Exercices pour développer la force et l'endurance.</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #4facfe; margin-bottom: 5px;">🧘‍♀️ Yoga et Stretching</h4>
+                            <p style="font-size: 14px; color: #666;">Améliorer la flexibilité et réduire le stress.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #4facfe; margin-bottom: 5px;">🎯 Objectifs Réalistes</h4>
+                            <p style="font-size: 14px; color: #666;">Fixer et atteindre des objectifs d'activité physique.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'mental') {
+                content.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Santé Mentale et Bien-être</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">😴 Sommeil Réparateur</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Techniques pour améliorer la qualité de votre sommeil.</p>
+                            <button class="btn btn-small" onclick="showArticleModal('sleep-health')">Lire l'article</button>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">🧘 Gestion du Stress</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Méthodes efficaces pour réduire le stress quotidien.</p>
+                            <button class="btn btn-small" onclick="showArticleModal('stress-management')">Lire l'article</button>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: #4facfe; margin-bottom: 10px;">💭 Méditation</h4>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Pratiques de pleine conscience pour la santé mentale.</p>
+                            <button class="btn btn-small" onclick="showNotification('Guide de méditation bientôt disponible')">Bientôt disponible</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadProfileContent(tab) {
+            const content = document.getElementById('profileContent');
+            
+            if (tab === 'visits') {
+                let visitsHTML = '<div class="profile-section"><h3>Historique des Visites</h3>';
+                
+                appData.profileData.visits.forEach(visit => {
+                    visitsHTML += `
+                        <div class="visit-item">
+                            <div class="visit-header">
+                                <h4>${visit.doctor}</h4>
+                                <span class="visit-date">${visit.date}</span>
+                            </div>
+                            <div class="visit-details">
+                                <p><strong>Raison:</strong> ${visit.reason}</p>
+                                <p><strong>Statut:</strong> <span class="badge badge-success">${visit.status}</span></p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                visitsHTML += '</div>';
+                content.innerHTML = visitsHTML;
+                
+            } else if (tab === 'benefits') {
+                let benefitsHTML = '<div class="profile-section"><h3>Avantages du Plan</h3>';
+                
+                appData.profileData.benefits.forEach(benefit => {
+                    benefitsHTML += `
+                        <div class="benefit-item">
+                            <h4>${benefit.title}</h4>
+                            <p>${benefit.description}</p>
+                        </div>
+                    `;
+                });
+                
+                benefitsHTML += '</div>';
+                content.innerHTML = benefitsHTML;
+                
+            } else if (tab === 'expenses') {
+                let expensesHTML = '<div class="profile-section"><h3>Dépenses de Santé</h3>';
+                
+                appData.profileData.expenses.forEach(expense => {
+                    expensesHTML += `
+                        <div class="expense-item">
+                            <div class="expense-info">
+                                <h4>${expense.description}</h4>
+                                <p>${expense.date}</p>
+                            </div>
+                            <div class="expense-amount">${expense.amount}</div>
+                        </div>
+                    `;
+                });
+                
+                expensesHTML += '</div>';
+                content.innerHTML = expensesHTML;
+                
+            } else if (tab === 'history') {
+                content.innerHTML = `
+                    <div class="profile-section">
+                        <h3>Historique Médical</h3>
+                        
+                        <div class="medical-history-item">
+                            <h4>Consultation Cardiologie</h4>
+                            <p>Hôpital Général de Kinshasa</p>
+                            <p>Examen de routine - Résultats normaux</p>
+                            <div class="date">10 Octobre 2023</div>
+                        </div>
+
+                        <div class="medical-history-item">
+                            <h4>Vaccination Grippe Saisonnière</h4>
+                            <p>Centre de Santé Ngaliema</p>
+                            <p>Vaccin administré sans complications</p>
+                            <div class="date">28 Septembre 2023</div>
+                        </div>
+
+                        <div class="medical-history-item">
+                            <h4>Analyse de Sang</h4>
+                            <p>Laboratoire Bioclinic</p>
+                            <p>Résultats dans les normes</p>
+                            <div class="date">15 Août 2023</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Antécédents Médicaux</h3>
+                        
+                        <div class="card">
+                            <div style="margin-bottom: 15px;">
+                                <h4 style="color: #4facfe; margin-bottom: 5px;">Hypertension artérielle</h4>
+                                <p style="font-size: 12px; color: #666;">Diagnostiquée en 2021 - Sous contrôle médical</p>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: #4facfe; margin-bottom: 5px;">Allergie saisonnière</h4>
+                                <p style="font-size: 12px; color: #666;">Diagnostiquée en 2020 - Gérée avec antihistaminiques</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'info') {
+                content.innerHTML = `
+                    <div class="profile-section">
+                        <h3>Informations Personnelles</h3>
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="font-weight: 600;">Nom complet:</span>
+                                <span>Jeanluc Ngeuma</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="font-weight: 600;">Date de naissance:</span>
+                                <span>15 Mars 1995</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="font-weight: 600;">Groupe sanguin:</span>
+                                <span>O+</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span style="font-weight: 600;">Téléphone:</span>
+                                <span>+254 11 595 6283 </span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-weight: 600;">Email:</span>
+                                <span>jeanluc.Ngeuma@email.cd</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadArticles() {
+            const articlesContainer = document.getElementById('articleResults');
+            let articlesHTML = '';
+
+            for (const [key, article] of Object.entries(appData.articles)) {
+                articlesHTML += `
+                    <div class="article-card article-item" data-category="${article.category}" onclick="showArticleModal('${key}')">
+                        <div class="article-image">
+                            <i class="fas fa-${getArticleIcon(article.category)}"></i>
+                        </div>
+                        <div class="article-content">
+                            <h3>${article.title}</h3>
+                            <p>${getArticleExcerpt(article.content)}</p>
+                            <div class="article-meta">
+                                <span>${article.author}</span>
+                                <span>${article.date}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            articlesContainer.innerHTML = articlesHTML;
+        }
+
+        function getArticleIcon(category) {
+            const icons = {
+                'nutrition': 'apple-alt',
+                'mental': 'brain',
+                'children': 'child',
+                'skin': 'hand-sparkles',
+                'prevention': 'shield-alt',
+                'diseases': 'heartbeat'
+            };
+            return icons[category] || 'file-medical';
+        }
+
+        function getArticleExcerpt(content) {
+            // Extraire le premier paragraphe comme extrait
+            const firstParagraph = content.split('</p>')[0].replace(/<[^>]*>/g, '');
+            return firstParagraph.length > 100 ? firstParagraph.substring(0, 100) + '...' : firstParagraph;
+        }
+
+        // Système de notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            
+            if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+                notification.style.color = 'white';
+            } else if (type === 'warning') {
+                notification.style.background = 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)';
+                notification.style.color = 'white';
+            } else {
+                notification.style.background = 'white';
+                notification.style.color = '#333';
+            }
+            
+            notificationMessage.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialisation de l'application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des onglets de bien-être
+            const wellnessTabs = document.querySelectorAll('#wellnessTabs .tab');
+            wellnessTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    wellnessTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadWellnessContent(this.dataset.tab);
+                });
+            });
+            
+            // Gestion des onglets de profil
+            const profileTabs = document.querySelectorAll('#profileTabs .tab');
+            profileTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    profileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadProfileContent(this.dataset.tab);
+                });
+            });
+            
+            // Gestion des onglets de consultation
+            const consultationTabs = document.querySelectorAll('#consultationType .tab');
+            consultationTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    consultationTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    showNotification(`Consultation ${this.dataset.type} sélectionnée`);
+                });
+            });
+            
+            // Gestion des puces de filtre
+            const filterChips = document.querySelectorAll('.chip');
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    if (!this.classList.contains('active')) {
+                        const parent = this.parentElement;
+                        parent.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                        
+                        this.classList.add('active');
+                        
+                        if (parent.id === 'hospitalFilters') {
+                            filterHospitals();
+                        } else if (parent.id === 'doctorFilters') {
+                            filterDoctors();
+                        } else if (parent.id === 'articleFilters') {
+                            filterArticles();
+                        }
+                    }
+                });
+            });
+            
+            // Gestion des méthodes de paiement
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    this.classList.add('selected');
+                    appData.selectedPayment = this.dataset.method;
+                    showNotification(`Méthode de paiement sélectionnée: ${this.querySelector('h4').textContent}`);
+                });
+            });
+            
+            // Initialiser le contenu des pages
+            loadWellnessContent('categories');
+            loadProfileContent('visits');
+            loadArticles();
+        });
+    </script>
+</body>
+</html>
